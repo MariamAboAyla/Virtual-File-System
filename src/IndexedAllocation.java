@@ -23,7 +23,7 @@ public class IndexedAllocation{
         if(startIndex != -1) { // if there is free block
             blocks.set(startIndex, 1); // set block to used
 
-            for(int i = 0 ;i < file.getSize() ; i++) { // allocate blocks for file
+            for(int i = 0 ;i < file.get_Size() ; i++) { // allocate blocks for file
                 int freeSpace = blocks.indexOf(-1); // find first free block
                 if(freeSpace > -1) { // if there is free block
                     blocksForFile.add(freeSpace); // add block to array of blocks for file
@@ -38,9 +38,9 @@ public class IndexedAllocation{
                 }
             }
             // StoredFiles.add(new Pair(file.getFilePath() , startIndex));
-            StoredFilesToIndexFiles.put(file.getFilePath() ,startIndex ); // add file to list of files
-            file.setAllocatedBlocks(blocksForFile); // set blocks for file
-            file.setStartIndex(startIndex); // set start index for file
+            StoredFilesToIndexFiles.put(file.get_FileName() ,startIndex ); // add file to list of files
+            file.set_AllocatedBlocks(blocksForFile); // set blocks for file
+            //file.setStartIndex(startIndex); // set start index for file
             IndexBlocks.put(startIndex, blocksForFile); // add blocks for file to index
 
         }
@@ -55,7 +55,7 @@ public class IndexedAllocation{
     public void deAllocate(VFile file) {
         int i;
         for(i = 0 ;i < StoredFiles.size();i++){ // find file in list of files
-            if(StoredFiles.get(i).path.equals(file.getFilePath())){ // if file found
+            if(StoredFiles.get(i).path.equals(file.get_FileName())){ // if file found
                 ArrayList<Integer> bl = IndexBlocks.get(StoredFiles.get(i).indexBlock); // get blocks for file
                 IndexBlocks.remove(StoredFiles.get(i).indexBlock); // remove blocks from index
                 StoredFiles.remove(i); // remove file from list of files

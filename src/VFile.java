@@ -1,64 +1,40 @@
 import java.util.ArrayList;
 
 public class VFile {
-    private String filePath;
+    private String fileName;
     private ArrayList<Integer> allocatedBlocks = new ArrayList<Integer>();
     private boolean deleted;
-
     private int startIndex = -1;
     private int size;
 
-    public VFile(int s) {
-        setSize(s);
+    public VFile(String fileName , int size) {
+        this.fileName=fileName;
+        this.size = size;
     }
 
-    public VFile(String Path , int s) {
-        filePath = Path;
-        size = s;
+    public String get_FileName() {
+        return fileName;
     }
 
-    public ArrayList<Integer> getAllocatedBlocks() {
+    public void set_AllocatedBlocks(ArrayList<Integer> allocatedBlocks) {
+        this.allocatedBlocks = allocatedBlocks;
+    }
+    public ArrayList<Integer> get_AllocatedBlocks() {
         return allocatedBlocks;
     }
 
-    public void setAllocatedBlocks(ArrayList<Integer> allocatedBlocks) {
-        this.allocatedBlocks = allocatedBlocks;
+    public void set_Deleted(boolean deleted) {
+        this.deleted = deleted;
     }
-
     public boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public int getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
+    public int get_Size() {return size;}
+    public void set_ٍSize(int size) {this.size = size;}
 
     @Override
     public String toString() {
-        return filePath;
+        return fileName;
     }
 }

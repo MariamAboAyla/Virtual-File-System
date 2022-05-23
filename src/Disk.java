@@ -37,6 +37,7 @@ public class Disk {
 		}
 		return -1;
 	}
+
 	///////allocate a specific block//////
 	public int allocate(int i)
 	{
