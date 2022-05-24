@@ -28,7 +28,7 @@ public class Main {
 					break;
 				case 2:
 					manager = new IndexedAllocation(size);
-//					root= ((IndexedAllocation)manager).loadStatues();
+					root= ((IndexedAllocation)manager).loadStatues();
 					if(root==null)
 					{
 						root = new VDirectory("root");
@@ -113,9 +113,7 @@ public class Main {
 						break;
 					case "Exit":
 						exit2 = true;
-						if(manager instanceof IndexedAllocation) {
-							((IndexedAllocation) manager).SaveHardDisk(root);
-						}
+
 						break;
 					default:
 						System.out.println("Invalid input");
