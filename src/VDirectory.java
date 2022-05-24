@@ -6,6 +6,11 @@ public class VDirectory {
     private ArrayList<VDirectory> subDirectories = new ArrayList<>();
     private boolean deleted;
 
+    public VDirectory() {
+    }
+    public VDirectory(String name) {
+        directoryName = name;
+    }
     public void set_DirectoryName(String directoryName) {
         this.directoryName = directoryName;
     }
@@ -35,7 +40,7 @@ public class VDirectory {
     }
 
 
-    public boolean addNewFile(String path , int size , ArrayList<Integer> allocatedBlocks){
+    public boolean addNewFile(String path , int size ){
         // get the last appear of '/' because the string after it is the file name.
         int target = path.lastIndexOf("/");
         String file = path.substring(target+1,path.length());
@@ -48,7 +53,7 @@ public class VDirectory {
         if(directory == null)return false;
 
         VFile newFile = new VFile(file,size);
-        newFile.set_AllocatedBlocks(allocatedBlocks);
+//        newFile.set_AllocatedBlocks(allocatedBlocks);
         newFile.set_Deleted(false);
 
         // return true if the file added , false otherwise
@@ -91,7 +96,12 @@ public class VDirectory {
                 // recursion call if the sub-directory not deleted
                 // to make the sub-directory be the main directory
                 if (!tempDirectory.isDeleted()) {
-                    file = tempDirectory.checkFilePath(pathes[1]);
+                    String temp="";
+                    for (int i = 1; i < pathes.length-1; i++) {
+                        temp += pathes[i] + "/";
+                    }
+                    temp+=pathes[pathes.length-1];
+                    file = tempDirectory.checkFilePath(temp);
                     if(file!=null)break;//here we get a file
                 }
             }
@@ -112,7 +122,12 @@ public class VDirectory {
                 // recursion call if the sub-directory not deleted
                 // to make the sub-directory be the main directory
                 if (!tempDirectory.isDeleted()) {
-                    directory = tempDirectory.checkDirectoryPath(pathes[1]);
+                    String temp="";
+                    for (int i = 1; i < pathes.length-1; i++) {
+                        temp += pathes[i] + "/";
+                    }
+                    temp+=pathes[pathes.length-1];
+                    directory = tempDirectory.checkDirectoryPath(temp);
                     if(directory!=null)break;// here we get a directory
                 }
             }
@@ -150,6 +165,14 @@ public class VDirectory {
         }
         subDirectories.add(newSubDirectory);
         return true;
+    }
+    public VDirectory getSubDirectory(String DirectoryName) {
+        for (VDirectory subDirectory : subDirectories) {
+            if (subDirectory.directoryName.equals(DirectoryName))
+                return subDirectory;
+        }
+        System.out.println("No such Directory");
+        return null;
     }
 
 
