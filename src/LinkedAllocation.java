@@ -1,7 +1,7 @@
 import java.util.*;
 
 
-public class LinkedAllocation {
+public class LinkedAllocation implements AllocationManager {
 
     private ArrayList<Integer> blocks = new ArrayList<>(); // of blocks size
     private final HashMap<String, String> directories = new HashMap <>(); // directories -> directory name points to file name; could acess ile from files map
@@ -27,8 +27,8 @@ public class LinkedAllocation {
         return this.blocks;
     }
 
-
-    public boolean allocate (VFile file)
+    @Override
+    public int allocate (VFile file)
     {
         int nextBlockIndex = blocks.indexOf ( -1 ); // first available block
         blocks.set ( nextBlockIndex , 1 );
@@ -40,7 +40,7 @@ public class LinkedAllocation {
         if((file.get_Size () > blocks.size ())  ||  emptySpaceSize<file.get_Size () )
         {
             System.out.println ("Unable to allocate file! No Enough Space !" );
-            return false;
+            return -1;
         }
 
         for (int i=0; i<fileSize; i++)
@@ -56,14 +56,20 @@ public class LinkedAllocation {
         directories.put ( directoryName, file.get_FileName () );
         // add the file to "files" and add the file to the directory
 
-        return true;
+        return 1;
 
     }
 
-    public boolean deAllocate()
+    @Override
+    public void displayDiskStatus() {
+
+    }
+
+    @Override
+    public void deAllocate(VFile file)
     {
         ///
-        return true;
+
     }
 
     public void displayAllocatedBlocks(String filePath)
@@ -73,7 +79,7 @@ public class LinkedAllocation {
         int startIndex = 0, endIndex = 0;
         for (Map.Entry<VFile, LinkedList<Integer> > iterator: files.entrySet ())
         {
-            if( Objects.equals ( iterator.getKey ( ).get_FilePath ( )   ,    filePath ) )
+            if( Objects.equals ( iterator.getKey ( ).get_FileName ( )   ,    filePath ) )
             {
                 vFile = iterator.getKey ();
                 list = iterator.getValue ( );
