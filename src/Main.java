@@ -28,7 +28,7 @@ public class Main {
 					break;
 				case 2:
 					manager = new IndexedAllocation(size);
-					root= ((IndexedAllocation)manager).loadStatues();
+//					root= ((IndexedAllocation)manager).loadStatues();
 					if(root==null)
 					{
 						root = new VDirectory("root");
