@@ -30,7 +30,6 @@ public class IndexedAllocation implements AllocationManager{
                 if(freeSpace > -1) { // if there is free block
                     blocksForFile.add(freeSpace); // add block to array of blocks for file
                     blocks.set(freeSpace, 1); // set block to used
-                    System.out.println("here");
                 }
                 else {
                     System.out.println("No enough space for file, please delete some files");
@@ -69,19 +68,22 @@ public class IndexedAllocation implements AllocationManager{
     @Override
     public void displayDiskStatus() {
         int allocated = 0 , freeSpace = 0;
+        StringBuilder bitVector = new StringBuilder();
         for(int i = 0 ; i < blocks.size() ; i++)
         {
-            if(i%10 == 0) { // if new line
-                System.out.println(); // new line
-            }
-            System.out.print(blocks.get(i) + " "); // print block
-            if(blocks.get(i)!=-1) // if block is allocated
+            if(blocks.get(i)!=-1){
+                // if block is allocated
                 allocated++; // increase allocated blocks
-            else
+                bitVector.append(" 1"); // add 1 to bit vector
+            }
+            else{
                 freeSpace++; // increase free space
+                bitVector.append(" 0"); // add 0 to bit vector
+            }
 
         }
-        System.out.println("\n\nNumber of allocated BLocks = " + allocated);
+        System.out.println("Disk Space:"+bitVector + " ");
+        System.out.println("Number of allocated BLocks = " + allocated);
         System.out.println("Number of Free BLocks = " + freeSpace);
         System.out.println("Total number of blocks = " + blocks.size()  + "\n");
     }
