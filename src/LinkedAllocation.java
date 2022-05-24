@@ -1,10 +1,10 @@
 import java.util.*;
 
 
-public class LinkedAllocation {
+public class LinkedAllocation implements AllocationMethod {
 
     private ArrayList<Integer> blocks = new ArrayList<>(); // of blocks size
-    private final HashMap<String, String> directories = new HashMap <>(); // directories -> directory name points to file name; could acess ile from files map
+    private final HashMap<String, ArrayList<String>> directories = new HashMap <>(); // directories -> directory name points to file name; could acess ile from files map
     private final HashMap<VFile, LinkedList<Integer> > files = new HashMap<> (); // file -> linked-list of assigned blocks
 
     public final String VFS = "VFIndexed.vfs";
@@ -17,12 +17,12 @@ public class LinkedAllocation {
         }
     }
 
-    void setBlocks (ArrayList<Integer> blocks)
+    public void setBlocks (ArrayList<Integer> blocks)
     {
         this.blocks = blocks;
     }
 
-    ArrayList<Integer> getBlocks ()
+    public ArrayList<Integer> getBlocks ( )
     {
         return this.blocks;
     }
@@ -53,17 +53,56 @@ public class LinkedAllocation {
         files.put ( file, fileBlocks); // add the file and its assigned blocks to list
 
         String directoryName = getDirectoryName(file);
-        directories.put ( directoryName, file.get_FileName () );
+        ArrayList<String> tmpDirectoryFiles = directories.get ( directoryName );
+        tmpDirectoryFiles.add ( file.get_FileName () );
+        directories.put ( directoryName, tmpDirectoryFiles );
+                //      directories.put ( directoryName, file.get_FileName () );
         // add the file to "files" and add the file to the directory
 
         return true;
 
     }
 
-    public boolean deAllocate()
+    public boolean deAllocate(String filePath)
     {
-        ///
-        return true;
+        //if delete it -> will delete from: directory list - file list - deallocate blocks
+        VFile vFile = null;
+        LinkedList<Integer> list = new LinkedList<> ();
+
+        for (Map.Entry<VFile, LinkedList<Integer> > iterator: files.entrySet ())
+        {
+            if( Objects.equals ( iterator.getKey ( ).get_FilePath ( )   ,    filePath ) )
+            {
+                vFile = iterator.getKey ();
+
+                //deallocates the blocks
+                for (Integer allocatedBlocks: iterator.getValue () )
+                {
+                    blocks.set ( allocatedBlocks, 0 ); // deallocate blocks - mark free
+                }
+
+                // empties the blocks linked list of the file
+                iterator.getValue ().clear ();
+
+                // empties the file itself from the directory list
+                String fileName = vFile.get_FileName ();
+                String directoryName = filePath.substring ( 0, (filePath.length () - fileName.length () ) ); // to get the directory name from path
+                ArrayList<String> directoryContent = directories.get ( directoryName );
+                directoryContent.remove ( fileName );
+                directories.remove ( directoryName );
+                directories.put ( directoryName, directoryContent );
+
+                // empties the file from the file list
+                files.remove ( iterator.getKey (), iterator.getValue () ); // delete it from files list
+
+
+                return true;
+
+            }
+        }
+
+        return false;
+
     }
 
     public void displayAllocatedBlocks(String filePath)
@@ -101,11 +140,20 @@ public class LinkedAllocation {
 
     String getDirectoryName(VFile file)
     {
+        String filePath = file.get_FilePath ();
 
-            return "";
+        for ( Map.Entry<String, ArrayList<String>> currentDirectory: directories.entrySet ())
+        {
+            if(filePath.contains ( currentDirectory.getKey () ))
+            {
+
+            }
+        }
+
+        return "";
     }
 
-    int getSpaceManager()
+    public int getSpaceManager()
     {
         // get the size of the empty blocks remaining
         int emptySize = 0;
@@ -121,7 +169,7 @@ public class LinkedAllocation {
         return emptySize;
     }
 
-    StringBuilder getFreeSpaceManager()
+    public StringBuilder getFreeSpaceManager()
     {
         // get the blocks in  a string of 0's and 1's ->
         // if 0 means block at ith item is empty, while if 1 means block at ith item is accompained
