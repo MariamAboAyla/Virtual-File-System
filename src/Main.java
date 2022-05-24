@@ -24,7 +24,11 @@ public class Main {
 			switch (choice) {
 				case 1:
 					manager = new ContiguousAllocation(size);
-					root = new VDirectory("root");
+					root= ((ContiguousAllocation)manager).loadStatues();
+					if(root==null)
+					{
+						root = new VDirectory("root");
+					}
 					break;
 				case 2:
 					manager = new IndexedAllocation(size);
@@ -69,6 +73,8 @@ public class Main {
 								System.out.println("File created successfully");
 								if(manager instanceof IndexedAllocation){
 									((IndexedAllocation) manager).saveStatues(args1.get(0));
+								} else if (manager instanceof ContiguousAllocation) {
+									((ContiguousAllocation) manager).saveStatues(args1.get(0));
 								}
 							}
 						} else {
