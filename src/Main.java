@@ -14,7 +14,7 @@ public class Main {
 		int size=scannerSize.nextInt();
 		boolean exit = false;
 
-		while(!exit) {
+		while(!exit ) {
 			boolean exit2=false;
 			System.out.println("Input the method you want to use: ");
 			System.out.println("1-Contiguous\n2-Indexed\n3-Linked\n4-Exit");
@@ -41,10 +41,15 @@ public class Main {
 					break;
 				case 3:
 					manager = new LinkedAllocation(size);
-
+					root= ((LinkedAllocation)manager).loadStatues();
+					if(root==null)
+					{
+						root = new VDirectory("root");
+					}
 					break;
 				case 4:
 					exit = true;
+					exit2 = true;
 					break;
 				default:
 					System.out.println("Invalid input");
@@ -71,10 +76,12 @@ public class Main {
 							}
 							else {
 								System.out.println("File created successfully");
-								if(manager instanceof IndexedAllocation){
-									((IndexedAllocation) manager).saveStatues(args1.get(0));
+								if(manager instanceof LinkedAllocation){
+									((LinkedAllocation) manager).saveStatues(args1.get(0));
 								} else if (manager instanceof ContiguousAllocation) {
 									((ContiguousAllocation) manager).saveStatues(args1.get(0));
+								} else if (manager instanceof IndexedAllocation) {
+									((IndexedAllocation) manager).saveStatues(args1.get(0));
 								}
 							}
 						} else {
